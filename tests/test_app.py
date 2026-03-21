@@ -1,7 +1,7 @@
 from fastapi import status
 from fastapi.testclient import TestClient
 
-from .utils import make_user
+from .utils import META, make_user
 
 
 def test_list_users(client: TestClient) -> None:
@@ -13,7 +13,7 @@ def test_list_users(client: TestClient) -> None:
     response_data = response.json()
     assert len(response_data) == 1
 
-    assert response_data[0]["meta"]["key1"] == "value1"
+    assert response_data[0]["meta"] == META
 
 
 def test_create_post(client: TestClient) -> None:

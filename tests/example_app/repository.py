@@ -6,7 +6,7 @@ from real_ladybug import QueryResult
 
 from wheke_ladybug import LadybugRepository
 
-from .models import Post, User
+from .models import Meta, Post, User
 
 
 class UserRepository(LadybugRepository):
@@ -26,7 +26,7 @@ class UserRepository(LadybugRepository):
                 await conn.execute(
                     """
                     CREATE (n:User {name: $name, meta: to_json($meta)})
-                    RETURN n.id as id;
+                    RETURN n.id AS id;
                     """,
                     parameters={
                         "name": user.name,
@@ -45,14 +45,21 @@ class UserRepository(LadybugRepository):
                 await conn.execute(
                     """
                     MATCH (n:User)
-                    RETURN n.id as id, n.name as name, n.meta as meta;
+                    RETURN n.id AS id, n.name AS name, n.meta AS meta;
                     """
                 ),
             )
 
             response = response.rows_as_dict().get_all()
 
-            return [User(**row) for row in cast(list[dict], response)]
+            users = []
+
+            for data in cast(list[dict], response):
+                data["meta"] = Meta.model_validate_json(data["meta"])
+
+                users.append(User.model_validate(data))
+
+            return users
 
 
 class PostRepository(LadybugRepository):
@@ -90,7 +97,7 @@ class PostRepository(LadybugRepository):
                     """
                     MATCH (u:User)-[r:Posted]->(p:Post)
                     WHERE u.id = $user_id
-                    RETURN p.id as id, p.message as message;
+                    RETURN p.id AS id, p.message AS message;
                     """,
                     parameters={"user_id": user_id}
                 ),

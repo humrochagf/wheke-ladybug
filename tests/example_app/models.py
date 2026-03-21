@@ -1,10 +1,14 @@
-from pydantic import BaseModel, Json
+from pydantic import BaseModel, ConfigDict
+
+
+class Meta(BaseModel):
+    model_config = ConfigDict(extra="allow")
 
 
 class User(BaseModel):
     id: int | None = None
     name: str
-    meta: dict | Json
+    meta: Meta
 
 
 class Post(BaseModel):
