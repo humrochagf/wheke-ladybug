@@ -1,8 +1,8 @@
 from collections.abc import Sequence
 from typing import cast
 
+from ladybug import QueryResult
 from pydantic_core import to_jsonable_python
-from real_ladybug import QueryResult
 
 from wheke_ladybug import LadybugRepository
 

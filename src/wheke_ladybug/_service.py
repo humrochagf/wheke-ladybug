@@ -1,7 +1,7 @@
 from collections.abc import Generator
 from contextlib import contextmanager
 
-from real_ladybug import AsyncConnection, Connection, Database
+from ladybug import AsyncConnection, Connection, Database
 from svcs import Container
 from wheke import WhekeSettings, get_service, get_settings
 
