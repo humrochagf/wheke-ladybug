@@ -1,6 +1,3 @@
-from collections.abc import Generator
-from contextlib import contextmanager
-
 from ladybug import AsyncConnection, Connection, Database
 from svcs import Container
 from wheke import WhekeSettings, get_service, get_settings
@@ -25,16 +22,12 @@ class LadybugService:
                 )
 
     @property
-    @contextmanager
-    def async_connection(self) -> Generator[AsyncConnection]:
-        with AsyncConnection(self.engine) as _connection:
-            yield _connection
+    def async_connection(self) -> AsyncConnection:
+        return AsyncConnection(self.engine)
 
     @property
-    @contextmanager
-    def connection(self) -> Generator[Connection]:
-        with Connection(self.engine) as _connection:
-            yield _connection
+    def connection(self) -> Connection:
+        return Connection(self.engine)
 
     def dispose(self) -> None:
         self.engine.close()

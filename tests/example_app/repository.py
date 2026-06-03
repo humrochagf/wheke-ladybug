@@ -35,8 +35,8 @@ class UserRepository(LadybugRepository):
                 ),
             )
 
-            response = cast(list[dict], response.rows_as_dict().get_all())
-            user.id = response[0]["id"]
+            data = cast(list[dict], response.rows_as_dict().get_all())
+            user.id = data[0]["id"]
 
     async def list(self) -> Sequence[User]:
         with self.db.async_connection as conn:
@@ -50,11 +50,9 @@ class UserRepository(LadybugRepository):
                 ),
             )
 
-            response = response.rows_as_dict().get_all()
-
             users = []
 
-            for data in cast(list[dict], response):
+            for data in cast(list[dict], response.rows_as_dict().get_all()):
                 data["meta"] = Meta.model_validate_json(data["meta"])
 
                 users.append(User.model_validate(data))
@@ -103,6 +101,6 @@ class PostRepository(LadybugRepository):
                 ),
             )
 
-            response = response.rows_as_dict().get_all()
+            data = response.rows_as_dict().get_all()
 
-            return [Post(**row) for row in cast(list[dict], response)]
+            return [Post(**row) for row in cast(list[dict], data)]

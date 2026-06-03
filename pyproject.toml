@@ -1,18 +1,22 @@
+[build-system]
+requires = ["uv_build>=0.11.17,<0.12.0"]
+build-backend = "uv_build"
+
 [project]
 name = "wheke-ladybug"
-version = "0.3.0"
+version = "0.4.0"
 description = "Add graph db capabilities to wheke with ladybug"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-  "ladybug",
+  "ladybug>=0.17.1",
   "wheke",
 ]
 
 [dependency-groups]
 dev = [
   "coolname",
-  "httpx",
+  "httpx2",
   "isort",
   "mypy",
   "pytest",
